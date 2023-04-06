@@ -9,21 +9,15 @@
 #                    ,V
 #                 OOb"
 #
-# A helper script for AUTOMATIC1111/stable-diffusion-webui.
+# A helper extension for AUTOMATIC1111/stable-diffusion-webui.
 # Enter your keywords and let the selections help you determine the look.
-# https://replicate.com/methexis-inc/img2prompt has been an incredible help for improving the prompts.
-# https://docs.google.com/document/d/1ZtNwY1PragKITY0F4R-f8CarwHojc9Wrf37d0NONHDg/ has been equally super important.
-# Thanks to https://github.com/xram64 for helping fix the interface
-# Art movements from https://en.wikipedia.org/wiki/List_of_art_movements I threw out the ones that did not work
+# https://docs.google.com/document/d/1ZtNwY1PragKITY0F4R-f8CarwHojc9Wrf37d0NONHDg/ has been important.
+# Thanks to xram64, maxaudron, jpsieben7 and Kilvoctu for their contributions.
+
+# Art movements from https://en.wikipedia.org/wiki/List_of_art_movements I threw out the ones that did not work and then added a mountain more from personal research.
 
 # Portrait prompt - Portrait of an attractive young lady,flower field background, (by artist [X]:1.3), square ratio
 # Negative - missing limbs, extra limbs
-
-# Landscape prompt - Small house in the middle of a forest,near a lake
-# Action prompt - Astronaut floating in space,firing laser at alien ship,galaxy background
-
-# Negatives - watermark,label,text
-
 # 20 steps on Euler A
 # Seed - 669
 
@@ -39,9 +33,14 @@ from modules.processing import Processed, process_images
 from modules.shared import cmd_opts, opts, state
 from modules import scripts
 
+
+
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=->
 
+file_dir = os.path.dirname(os.path.realpath("__file__"))
+# ResourceDir = os.path.join(file_dir, f"extensions/StylePile/StylePile/")
 ResourceDir = os.path.join(scripts.basedir(), f"StylePile/")
+strPresetName = "Example"
 
 def FilesInFolder(SourceFolder):
     return [file for file in os.listdir(SourceFolder)]
@@ -49,87 +48,215 @@ def FilesInFolder(SourceFolder):
 def FilesInFolderFullPath(SourceFolder):
     return [SourceFolder + file for file in os.listdir(SourceFolder)]
 
+def SaveAPreset(PresetName):
+    # Ask for a filename
+    # filename = input("Please enter a filename: ")
+
+    # Create the XML file
+    xml_file = open(ResourceDir + PresetName + ".xml", "w")
+
+    # Write the 6 different variables to the file
+    xml_file.write("<variable1>" + PresetName + "</variable1>\n")
+    xml_file.write("<variable2>" + ResourceDir + "</variable2>\n")
+    xml_file.write("<variable3>" + PresetName + "</variable3>\n")
+    xml_file.write("<variable4>value4</variable4>\n")
+    xml_file.write("<variable5>value5</variable5>\n")
+    xml_file.write("<variable6>value6</variable6>\n")
+
+    # Close the file
+    xml_file.close()
+
+def LoadAPreset(PresetName):
+    variable3_value = "Ooo"
+    # try:
+    #     tree = ET.parse(ResourceDir + PresetName + ".xml")
+    #     root = tree.getroot()
+
+    #     # Update the values of the variables based on the XML file
+    #     variable3_value = root.find("variable3").text
+    #     # Update other variables as needed
+
+    #     return f"Preset {PresetName} loaded successfully."
+
+    # except FileNotFoundError:
+    #     return f"Preset {PresetName} not found."
+
 ElementConcept = [
+    "Abstract",
+    "Abusive",
     "Acclaimed",
+    "Aesthetic",
     "Alternative",
     "Amateur",
+    "Amazing",
+    "Angular",
     "Artificial",
+    "Artistic",
+    "Avant-Garde",
     "Award Winning",
+    "Awesome",
+    "Bad",
     "Basic",
     "Beginner",
     "Bipolar",
+    "Bloody",
     "Boyish",
+    "Butchered",
+    "Captivating",
+    "Cathartic",
+    "Cerebral",
     "Childish",
     "Cinematic",
     "Clever",
     "Clumsy",
     "Cognitive",
+    "Compelling",
     "Complex",
     "Compressed",
     "Controllable",
+    "Controversial",
     "Corrupted",
+    "Countercultural",
+    "Creative",
+    "Cultivated",
+    "Cultured",
+    "Cutesy",
     "Damaged",
+    "Dazzling",
+    "Death-Defying",
+    "Decorative",
+    "Defiant",
+    "Demonic",
     "Destroyed",
+    "Detailed",
+    "Deviant",
+    "Devilish",
+    "Different",
     "Disgusting",
+    "Distasteful",
     "Divisive",
     "Dramatic",
     "Dumb",
+    "Eccentric",
+    "Elegant",
     "Eliminated",
+    "Encrypted",
+    "Energetic",
+    "Erotic",
     "Excessive",
     "Exciting",
+    "Expensive",
+    "Experimental",
+    "Exquisite",
     "Extreme",
     "Feminine",
     "Filtered",
+    "Fine",
     "Fixated",
     "Fixed",
     "Foolish",
     "Fragile",
+    "Free",
     "Girlish",
+    "Glamorous",
+    "Godlike",
+    "Good",
     "Gorgeous",
+    "Gory",
+    "Graceful",
+    "Grand",
     "Groundbreaking",
+    "Happy",
+    "Harmonious",
     "Hated",
     "Hidden",
     "Highly Rated",
+    "Horrible",
     "Horrifying",
+    "Ideal",
     "Imaginary",
     "Imaginative",
     "Imitated",
+    "Impossible",
+    "Inconceivable",
+    "Incredible",
+    "Indecent",
+    "Inelegant",
+    "Insane",
     "Jaded",
-    "Light hearted",
+    "Jaw-Dropping",
+    "Light Hearted",
     "Loved",
     "Low Rated",
+    "Luxurious",
     "Magical",
     "Masculine",
     "Masterful",
     "Masterpiece",
     "Maximalist",
+    "Melodious",
+    "Mesmerizing",
     "Methodological",
+    "Mind-Boggling",
+    "Miraculous",
     "Misunderstood",
     "Mundane",
+    "Musical",
+    "New",
+    "Nice",
+    "Nonconformist",
+    "Obscene",
+    "Old",
+    "Ornamental",
     "Overprocessed",
     "Pathetic",
     "Photoshopped",
+    "Pictorial",
+    "Picturesque",
+    "Pleasing",
+    "Poetic",
     "Preview",
+    "Prodigious",
+    "Provocative",
     "Raw",
     "Recycled",
+    "Refined",
     "Religious",
+    "Rhythmical",
     "Rough",
     "Sacrificial",
     "Sacrilegious",
     "Schematic",
+    "Scientific",
+    "Sensitive",
+    "Shocking",
     "Simple",
+    "Smokey",
     "Sophisticated",
+    "Stimulating",
     "Stupid",
+    "Stylized",
+    "Symphonic",
+    "Trashy",
     "Trustworthy",
+    "Twisted",
+    "Ugly",
     "Unbelievable",
+    "Uncanny",
+    "Unconventional",
+    "Uncreative",
     "Understandable",
     "Unearthed",
     "Unfiltered",
     "Unfinished",
     "Unhinged",
+    "Unimaginative",
     "Universal",
+    "Unorthodox",
+    "Unreal",
     "Unsuccessful",
     "Venerable",
+    "Violent",
     "Visionary",
     "Vivacious"
 ]
@@ -142,7 +269,9 @@ ResultNames = [
     "3D Rendering",
     "Painting",
     "Drawing",
-    "Vector Art"
+    "Vector Art",
+    "Sculpture",
+    "Mixed media"
 ]
 
 ResultTypeBefore = {
@@ -151,11 +280,10 @@ ResultTypeBefore = {
     "3D Rendering": "Professional 3D rendering",
     "Painting": "Painting",
     "Drawing": "Drawing",
-    "Vector Art": "Vector image"
+    "Vector Art": "Vector image",
+    "Sculpture": "Sculpture",
+    "Mixed media": "Mixed media artwork"
 }
-
-#"3D Rendering": ",Highly detailed,Art by senior Artist,Polycount,trending on CGSociety,trending on ArtStation",
-#"Photo": ",HD,4K,8K,highly detailed,Sharp,Photo-realism,Professional photograph,Masterpiece",
     
 ResultTypePositives = {
     "Photo": ",Highly Detailed",
@@ -163,7 +291,9 @@ ResultTypePositives = {
     "3D Rendering": ",CGSociety,ArtStation",
     "Painting": " ",
     "Drawing": " ",
-    "Vector Art": ",(Flat style:1.3),Illustration,Behance"
+    "Vector Art": ",(Flat style:1.3),Illustration,Behance",
+    "Sculpture": " ",
+    "Mixed media": " "
 }
 
 ResultTypeNegatives = {
@@ -172,7 +302,9 @@ ResultTypeNegatives = {
     "3D Rendering": ",((Wireframe)),Polygons,Screenshot,Character design,Software,UI",
     "Painting": "Low quality,Bad composition,Faded,(Photo:1.5),(Frame:1.3)",
     "Drawing": ",Low quality,Photo,Artifacts,Table,Paper,Pencils,Pages,Wall",
-    "Vector Art": ",(Watermark:1.5),(Text:1.3)"
+    "Vector Art": ",(Watermark:1.5),(Text:1.3)",
+    "Sculpture": "Low quality",
+    "Mixed media": "Low quality"
 }
 
 ResultType = {
@@ -184,14 +316,14 @@ ResultType.update(ResultTypePositives)
 
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=->
 
-ResultDirectionList = FilesInFolder(ResourceDir + "Directions/")
-ResultDirectionList = list(
-    map(lambda x: x.replace(".jpg", ""), ResultDirectionList))
-ResultDirection = ["Not set", "Random"] + ResultDirectionList
+ResultExecutionList = FilesInFolder(ResourceDir + "Directions/")
+ResultExecutionList = list(
+    map(lambda x: x.replace(".jpg", ""), ResultExecutionList))
+ResultExecution = ["Not set", "Random"] + ResultExecutionList
 
-ResultDirectionImages = FilesInFolderFullPath(ResourceDir + "Directions/")
-ResultDirectionImages = list(
-    map(lambda x: x.replace("\\", "/"), ResultDirectionImages))
+ResultExecutionImages = FilesInFolderFullPath(ResourceDir + "Directions/")
+ResultExecutionImages = list(
+    map(lambda x: x.replace("\\", "/"), ResultExecutionImages))
 
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=->
 
@@ -211,8 +343,6 @@ Artists = ["Not set", "Random"] + ResultArtistList
 ResultArtistImages = FilesInFolderFullPath(ResourceDir + "Artists/")
 ResultArtistImages = list(
     map(lambda x: x.replace("\\", "/"), ResultArtistImages))
-
-#ResultArtistColumn = "\n".join(str(item) for item in ResultArtistList)
 
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=->
 
@@ -244,6 +374,10 @@ with open(ResourceDir + "Inspiration/Actions.txt", 'r+') as tf:
 
 with open(ResourceDir + "Inspiration/Locations.txt", 'r+') as tf:
     Locations = [line.rstrip() for line in tf]
+
+
+
+
 
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=->
 
@@ -281,7 +415,7 @@ PresetNegatives = {
     "Feminine portrait": ",robot eyes,distorted pupils,distorted eyes,Unnatural anatomy,strange anatomy,things on face",
     "Masculine portrait": ",robot eyes,distorted pupils,distorted eyes,Unnatural anatomy,strange anatomy,things on face",
     "WaiFusion": ",things on face,Unnatural anatomy,strange anatomy",
-    "Horrible Monsters": ",(attractive),pretty,smooth,cArtoon,pixar,human",
+    "Horrible Monsters": ",(attractive),pretty,smooth,cartoon,pixar,human",
     "Robots": ",cartoon",
     "Retrofuturism": ",extra limbs,malformed limbs,modern",
     "Propaganda": ",extra limbs,malformed limbs,modern",
@@ -320,37 +454,62 @@ class Script(scripts.Script):
 
     def ui(self, is_img2img):
         with gr.Tab("Parameters"):
-            with gr.Row():
-                ddResultConcept = gr.Dropdown(
-                    ResultConcept, label="Conceptually", value="Not set")
-                ddCoreResultType = gr.Dropdown(
-                    list(ResultType.keys()), label="Image type", value="Not set")   
-                slResultTypeStrength = gr.Slider(
-                    0, 2, value=1.3, step=0.05, show_label=False)
+            if self.txt2img_prompt is not None:
+                with gr.Row():
+                    bTestPrompt = gr.Button('Insert default prompt')
+                    bTestPrompt.click(fn=lambda x: "Portrait of an attractive young lady,flower field background, square ratio", 
+                        inputs  = [self.txt2img_prompt],
+                        outputs = [self.txt2img_prompt])
+
+                    bInspireMe = gr.Button('Inspire me, StylePile')
+                    bInspireMe.click(fn=lambda x: random.choice(Subjects) +","+ random.choice(Actions) +","+ random.choice(Locations)+",", 
+                        inputs  = [self.txt2img_prompt],
+                        outputs = [self.txt2img_prompt])
+
+                    # Create a Gradio input field for PresetName
+                    strPresetName = gr.Textbox(lines=1, placeholder="Enter Preset Name")
+
+                    # Create Gradio buttons and bind the respective functions
+                    bSavePreset = gr.Button('Save Preset')
+                    bSavePreset.click(SaveAPreset(strPresetName.value))
+
+                    bLoadPreset = gr.Button('Load Preset')
+                    bLoadPreset.click(LoadAPreset(strPresetName.value))
+
             with gr.Row():
                 with gr.Column():
-                    ddResultDirection = gr.Dropdown(
-                        ResultDirection, label="Direction", value="Not set")
-                    slResultDirectionStrength = gr.Slider(
+                    ddResultConcept = gr.Dropdown(
+                        ResultConcept, label="Concept/Direction/Adjective (Needs selection ==>)", value="Not set")
+                with gr.Column():
+                    ddCoreResultType = gr.Dropdown(
+                        list(ResultType.keys()), label="Image type/General appearance", value="Not set")   
+                    slResultTypeStrength = gr.Slider(
+                        0, 2, value=1.3, step=0.05, show_label=False)
+            with gr.Row():
+                with gr.Column():
+                    ddResultExecution = gr.Dropdown(
+                        ResultExecution, label="Result execution/Look", value="Not set")
+                    slResultExecutionStrength = gr.Slider(
                         0, 2, value=1.3, step=0.05, show_label=False)
                 with gr.Column():
                     ddResultMood = gr.Dropdown(
-                        ResultMood, label="Mood", value="Not set")
+                        ResultMood, label="Feeling/Mood", value="Not set")
                     slResultMoodStrength = gr.Slider(
                         0, 2, value=1.3, step=0.05, show_label=False)
                 with gr.Column():
                     ddResultColor = gr.Dropdown(
-                        ResultColor, label="Colors", value="Not set")
+                        ResultColor, label="Color influence", value="Not set")
                     slResultColorStrength = gr.Slider(
                         0, 2, value=1.3, step=0.05, show_label=False)
+                with gr.Column():
+                    ddPreset = gr.Dropdown(list(Preset.keys()), label="Style influence (incomplete)", value="None")
             with gr.Row():
                 cbChangeCount = gr.Checkbox(
                     value=True, label="Set batch count to prompt count")
                 cbIncreaseSeed = gr.Checkbox(
                     value=True, label="Increase seed with batch size")
                 cbShowTips = gr.Checkbox(
-                    value=False, label="Show tips when generating")
-                ddPreset = gr.Dropdown(list(Preset.keys()), label="Style influence (incomplete)", value="None")
+                    value=False, label="Show tips after generation")
             with gr.Row():
                 strSequentialPrompt = gr.Textbox(
                     lines=3, label="Sequential prompts [X]", placeholder="Insert [X] anywhere in main prompt to sequentially insert values from here. Random values will be added here or to main prompt.")
@@ -359,12 +518,20 @@ class Script(scripts.Script):
                     lines=3, label="SubSequential prompts [Y]", placeholder="Insert [Y] in the final prompt <== to sequentially insert values from here (and increase prompt count). This is done after all other prompts and loops through all lines.")
 
             with gr.Row():
-                strRandomPromptA = gr.Textbox(
-                    lines=3, label="Random [A]", placeholder="Insert [A] anywhere in main prompt (or [X] prompt) to randomly insert values from here.")
-                strRandomPromptB = gr.Textbox(
-                    lines=3, label="Random [B]", placeholder="Insert [B] anywhere in main prompt (or [X] prompt) to randomly insert values from here.")
-                strRandomPromptC = gr.Textbox(
-                    lines=3, label="Random [C]", placeholder="Insert [C] anywhere in main prompt (or [X] prompt) to randomly insert values from here.")
+                with gr.Column():
+                    strRandomPromptA = gr.Textbox(
+                        lines=3, label="Random [A]", placeholder="Insert [A] anywhere in main prompt (or [X] prompt) to randomly insert values from here.")
+                    strRandomPromptB = gr.Textbox(
+                        lines=3, label="Random [B]", placeholder="Insert [B] anywhere in main prompt (or [X] prompt) to randomly insert values from here.")
+                    strRandomPromptC = gr.Textbox(
+                        lines=3, label="Random [C]", placeholder="Insert [C] anywhere in main prompt (or [X] prompt) to randomly insert values from here.")
+                with gr.Column():
+                    strRandomPromptD = gr.Textbox(
+                        lines=3, label="Random [D]", placeholder="Insert [D] anywhere in main prompt (or [X] prompt) to randomly insert values from here.")
+                    strRandomPromptE = gr.Textbox(
+                        lines=3, label="Random [E]", placeholder="Insert [E] anywhere in main prompt (or [X] prompt) to randomly insert values from here.")
+                    strRandomPromptF = gr.Textbox(
+                        lines=3, label="Random [F]", placeholder="Insert [F] anywhere in main prompt (or [X] prompt) to randomly insert values from here.")
 
             with gr.Row():
                 with gr.Column():
@@ -381,20 +548,6 @@ class Script(scripts.Script):
                     selArtMovementStrengthB = gr.Slider(0, 2, value=1.3, step=0.05, label="Influence")
                     selArtMovementC = gr.Dropdown(ArtMovements, label="Art movement", value="Not set")
                     selArtMovementStrengthC = gr.Slider(0, 2, value=1.3, step=0.05, label="Influence")
-            
-            if self.txt2img_prompt is not None:
-                with gr.Row():
-                    bTestPrompt = gr.Button('Insert default prompt')
-                    #if self.txt2img_prompt is not None:
-                    bTestPrompt.click(fn=lambda x: "Portrait of an attractive young lady,flower field background, square ratio", 
-                        inputs  = [self.txt2img_prompt],
-                        outputs = [self.txt2img_prompt])
-                            
-                    bInspireMe = gr.Button('Inspire me, StylePile')
-                    #if self.txt2img_prompt is not None:
-                    bInspireMe.click(fn=lambda x: random.choice(Subjects) +","+ random.choice(Actions) +","+ random.choice(Locations)+",", 
-                        inputs  = [self.txt2img_prompt],
-                        outputs = [self.txt2img_prompt])
 
             
             # with gr.Row():
@@ -408,8 +561,8 @@ class Script(scripts.Script):
             # b8images.click(fn = lambda p:8, inputs = [self.batch_count],outputs = [self.batch_count])
             # b8images.click(fn = lambda p:8, inputs = [self.batch_size],outputs = [self.batch_size])
 
-        with gr.Tab("Directions") as StyleTab:
-            gr.Gallery(value=ResultDirectionImages, show_label=False).style(
+        with gr.Tab("Looks") as StyleTab:
+            gr.Gallery(value=ResultExecutionImages, show_label=False).style(
                 grid=(3, 3, 3, 3, 4, 4), container=False)
 
         with gr.Tab("Moods"):
@@ -553,10 +706,13 @@ class Script(scripts.Script):
                 strRandomPromptA,
                 strRandomPromptB,
                 strRandomPromptC,
+                strRandomPromptD,
+                strRandomPromptE,
+                strRandomPromptF,
                 slResultTypeStrength,
                 ddCoreResultType,
-                ddResultDirection,
-                slResultDirectionStrength,
+                ddResultExecution,
+                slResultExecutionStrength,
                 ddResultMood,
                 slResultMoodStrength,
                 ddResultColor,
@@ -588,10 +744,13 @@ class Script(scripts.Script):
             strRandomPromptA: str,
             strRandomPromptB: str,
             strRandomPromptC: str,
+            strRandomPromptD: str,
+            strRandomPromptE: str,
+            strRandomPromptF: str,
             slResultTypeStrength,
             ddCoreResultType,
-            ddResultDirection,
-            slResultDirectionStrength,
+            ddResultExecution,
+            slResultExecutionStrength,
             ddResultMood,
             slResultMoodStrength,
             ddResultColor,
@@ -653,6 +812,9 @@ class Script(scripts.Script):
         RandomLinesA = [r.strip() for r in strRandomPromptA.splitlines()]
         RandomLinesB = [r.strip() for r in strRandomPromptB.splitlines()]
         RandomLinesC = [r.strip() for r in strRandomPromptC.splitlines()]
+        RandomLinesD = [r.strip() for r in strRandomPromptD.splitlines()]
+        RandomLinesE = [r.strip() for r in strRandomPromptE.splitlines()]
+        RandomLinesF = [r.strip() for r in strRandomPromptF.splitlines()]
 
         # So the progress bar works correctly
         state.job_count = MainJobCount * SubIterationCount * SubCycleCount
@@ -660,7 +822,7 @@ class Script(scripts.Script):
         CurrentChoice = 0
         SubCurrentChoice = 0
 
-        FinalResultDirection = ""
+        FinalResultExecution = ""
 
         for x in range(MainJobCount):
             SeedStep = 0
@@ -755,23 +917,23 @@ class Script(scripts.Script):
 
                 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=->
 
-                if ddResultDirection != "Not set":
-                    if ddResultDirection == "Random":
-                        FinalResultDirection = " (" + random.choice(
-                            ResultDirectionList) + ":" + str(slResultDirectionStrength) + ") "
+                if ddResultExecution != "Not set":
+                    if ddResultExecution == "Random":
+                        FinalResultExecution = " (" + random.choice(
+                            ResultExecutionList) + ":" + str(slResultExecutionStrength) + ") "
                     else:
-                        FinalResultDirection = " (" + ddResultDirection + \
-                            ":" + str(slResultDirectionStrength) + ") "
+                        FinalResultExecution = " (" + ddResultExecution + \
+                            ":" + str(slResultExecutionStrength) + ") "
 
                 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=->
 
                 # Pick the mood
                 if ddResultMood != "Not set":
                     if ddResultMood == "Random":
-                        FinalResultMood = ",(" + random.choice(ResultMoodList) + \
+                        FinalResultMood = " (" + random.choice(ResultMoodList) + \
                             ":" + str(slResultMoodStrength) + ") "
                     else:
-                        FinalResultMood = ",(" + ddResultMood + \
+                        FinalResultMood = " (" + ddResultMood + \
                             ":" + str(slResultMoodStrength) + ") "
 
                 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=->
@@ -806,6 +968,24 @@ class Script(scripts.Script):
                 else:
                     TempText = TempText.replace("[C]", "")
 
+                if len(RandomLinesD) > 0:
+                    TempText = TempText.replace(
+                        "[D]", random.choice(RandomLinesD))
+                else:
+                    TempText = TempText.replace("[D]", "")
+
+                if len(RandomLinesE) > 0:
+                    TempText = TempText.replace(
+                        "[E]", random.choice(RandomLinesE))
+                else:
+                    TempText = TempText.replace("[E]", "")
+
+                if len(RandomLinesF) > 0:
+                    TempText = TempText.replace(
+                        "[F]", random.choice(RandomLinesF))
+                else:
+                    TempText = TempText.replace("[F]", "")
+
                 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=->
 
                 # Colors
@@ -828,7 +1008,7 @@ class Script(scripts.Script):
                     TypeNegatives = ResultTypeNegatives[MainType]
 
                 # Our main prompt composed of all the selected elements
-                MainPositive = TypeFront + FinalResultDirection + FinalResultMood + TempText + \
+                MainPositive = TypeFront + FinalResultExecution + FinalResultMood + TempText + \
                     AllArtists + TypePositives + AllMovements + \
                     FinalResultColor + Preset[ddPreset]
 
@@ -923,5 +1103,4 @@ class Script(scripts.Script):
             print(
                 f"\n\nStylePile processing complete. Here's a random tip:\n{random.choice(TipsAndTricks)}\n")
 
-        return Processed(p=p, images_list=images, seed=p.seed, all_seeds=seeds, all_prompts=prompts, info=infotexts[0],
-                         infotexts=infotexts)
+        return Processed(p=p, images_list=images, seed=p.seed, all_seeds=seeds, all_prompts=prompts, info=infotexts[0], infotexts=infotexts)
